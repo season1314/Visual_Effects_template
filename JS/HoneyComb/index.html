@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HONEYCOMB
+    </title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="line">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div class="line">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div class="line">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div class="line">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div class="line">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div class="line">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div class="line">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+    </div>
+
+</body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        margin-top: calc(100vw/9/6);
+    }
+
+    .line {
+        width: 100vw;
+        display: flex;
+        margin-top: calc(-100vw/9/6);
+    }
+
+    .line:nth-child(even) {
+        transform: translate(calc(-100vw / 18))
+    }
+
+    .item {
+        flex-shrink: 0;
+        width: calc(100vw / 9);
+        height: calc(100vw / 9);
+        background-color: black;
+        outline: 2px solid #fff;
+        -webkit-clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+        clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+    }
+</style>
+<script>
+    const lines = document.querySelectorAll('.line');
+
+    lines.forEach((line, lineIndex) => {
+        const items = line.querySelectorAll('.item');
+
+        items.forEach((item, itemIndex) => {
+            item.addEventListener('mouseenter', () => {
+                handleHover(lineIndex, itemIndex, true);
+            });
+
+            item.addEventListener('mouseleave', () => {
+                handleHover(lineIndex, itemIndex, false);
+            });
+        });
+    });
+
+    function handleHover(lineIndex, itemIndex, isEnter) {
+        const scaleMain = isEnter ? '1.2' : '1';
+        const scaleOthers = isEnter ? '0.9' : '1';
+
+        const setTransform = (element, scale) => {
+            if (element) {
+                element.style.transform = `scale(${scale})`;
+                element.style.transition = 'transform 0.2s ease';
+            }
+        };
+
+        const currentItems = lines[lineIndex].querySelectorAll('.item');
+        setTransform(currentItems[itemIndex], scaleMain);
+        setTransform(currentItems[itemIndex - 1], scaleOthers);
+        setTransform(currentItems[itemIndex + 1], scaleOthers);
+
+        const handleAdjacentLine = (adjLineIndex, offset) => {
+            if (adjLineIndex >= 0 && adjLineIndex < lines.length) {
+                const adjItems = lines[adjLineIndex].querySelectorAll('.item');
+                const isEven = adjLineIndex % 2 === 0;
+                const idx1 = isEven ? itemIndex - offset : itemIndex + offset;
+                const idx2 = isEven ? itemIndex : itemIndex;
+
+                setTransform(adjItems[idx1], scaleOthers);
+                setTransform(adjItems[idx2], scaleOthers);
+            }
+        };
+
+        handleAdjacentLine(lineIndex - 1, 1);
+        handleAdjacentLine(lineIndex + 1, 1);
+    }
+
+
+
+</script>
+
+</html>
